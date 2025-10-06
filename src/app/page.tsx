@@ -53,7 +53,7 @@ export default function Home() {
             onClick={() => handleNavigation("/dispositivos")}
             className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow hover:shadow-lg transition flex flex-col items-center"
           >
-            <Image src="/divices.jpg" alt="Dispositivos" width={48} height={48} />
+            <Image src="/devices.jpg" alt="Dispositivos" width={48} height={48} />
             <span className="mt-4 font-medium text-lg">Dispositivos</span>
             <p className="text-sm text-gray-500 mt-2 text-center">
               Administra los equipos eléctricos conectados.
@@ -77,7 +77,7 @@ export default function Home() {
             onClick={() => handleNavigation("/soporte")}
             className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow hover:shadow-lg transition flex flex-col items-center"
           >
-            <Image src="/sopport.png" alt="Soporte" width={48} height={48} />
+            <Image src="/support.png" alt="Soporte" width={48} height={48} />
             <span className="mt-4 font-medium text-lg">Contacto y Soporte</span>
             <p className="text-sm text-gray-500 mt-2 text-center">
               Obtén asistencia o envía comentarios al equipo técnico.
