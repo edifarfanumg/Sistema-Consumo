@@ -11,7 +11,7 @@ export default function AprendizajePage() {
     {
       titulo: "Monitoreo inteligente en tiempo real",
       descripcion: "Descubre cómo los sensores y medidores inteligentes ayudan a optimizar el uso de energía.",
-      imagen: "/learn2.jpg",
+      imagen: "/learn2.png",
       enlace: "#",
     },
     {
