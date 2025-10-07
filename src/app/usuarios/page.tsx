@@ -1,7 +1,10 @@
 "use client";
 import { useState } from "react";
+import { protegerRuta } from "@/utils/protegerRuta"; // 👈 Importa el helper
 
 export default function UsuariosPage() {
+  protegerRuta("ADMIN"); // 🔐 Solo los administradores podrán acceder
+
   const [usuarios, setUsuarios] = useState([
     { id: 1, nombre: "Carlos Pérez", correo: "carlos@admin.com", rol: "Administrador", estado: "Activo" },
     { id: 2, nombre: "María López", correo: "maria@user.com", rol: "Usuario", estado: "Activo" },
