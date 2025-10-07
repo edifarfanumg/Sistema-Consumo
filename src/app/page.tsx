@@ -83,6 +83,31 @@ export default function Home() {
               Obtén asistencia o envía comentarios al equipo técnico.
             </p>
           </button>
+
+          {/* Botón Gestión de Usuarios */}
+          <button
+            onClick={() => handleNavigation("/usuarios")}
+            className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow hover:shadow-lg transition flex flex-col items-center"
+          >
+            <Image src="/users.png" alt="Usuarios" width={48} height={48} />
+            <span className="mt-4 font-medium text-lg">Usuarios</span>
+            <p className="text-sm text-gray-500 mt-2 text-center">
+              Administra los usuarios registrados en el sistema.
+            </p>
+          </button>
+          {/* Botón Reportes */}
+          <button
+            onClick={() => handleNavigation("/reportes")}
+            className="p-6 rounded-2xl bg-white dark:bg-gray-800 shadow hover:shadow-lg transition flex flex-col items-center"
+          >
+            <Image src="/reports.png" alt="Reportes" width={48} height={48} />
+            <span className="mt-4 font-medium text-lg">Reportes</span>
+            <p className="text-sm text-gray-500 mt-2 text-center">
+             Analiza tu consumo histórico y genera reportes personalizados.
+            </p>
+          </button>
+
+
         </div>
       </main>
 
