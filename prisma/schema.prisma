@@ -33,7 +33,9 @@ model Dispositivo {
   nombre    String
   tipo      String
   estado    String
+  consumo   Float    @default(0) // Nuevo campo para consumo energético
   usuarioId Int
   usuario   Usuario  @relation(fields: [usuarioId], references: [id])
   createdAt DateTime @default(now())
 }
+

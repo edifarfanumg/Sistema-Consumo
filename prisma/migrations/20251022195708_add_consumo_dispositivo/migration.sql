@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Dispositivo" ADD COLUMN     "consumo" DOUBLE PRECISION NOT NULL DEFAULT 0;
