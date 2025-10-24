@@ -1,23 +1,33 @@
+// src/app/api/usuarios/route.ts
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+// ✅ Obtener todos los usuarios
 export async function GET() {
   try {
     const usuarios = await prisma.usuario.findMany();
-    return NextResponse.json(usuarios ?? []); // 👈 garantiza que devuelva un array
+
+    // Garantiza que siempre retorne un array, incluso si no hay datos
+    return NextResponse.json(usuarios ?? []);
   } catch (error) {
-    console.error("Error al obtener los usuarios:", error);
-    return NextResponse.json([], { status: 500 }); // 👈 devuelve un array vacío en caso de error
+    console.error("Error en GET /api/usuarios:", error);
+    return NextResponse.json([], { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
+// ✅ Crear un nuevo usuario
+export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
+
     const nuevoUsuario = await prisma.usuario.create({ data });
+
     return NextResponse.json(nuevoUsuario);
   } catch (error) {
-    console.error("Error al crear usuario:", error);
-    return NextResponse.json({ error: "Error al crear usuario" }, { status: 500 });
+    console.error("Error en POST /api/usuarios:", error);
+    return NextResponse.json(
+      { error: "Error al crear usuario" },
+      { status: 500 }
+    );
   }
 }

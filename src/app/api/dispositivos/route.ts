@@ -1,22 +1,29 @@
 // src/app/api/dispositivos/route.ts
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+// ✅ GET: obtener todos los dispositivos
 export async function GET() {
   try {
     const dispositivos = await prisma.dispositivo.findMany({
       include: { usuario: true }, // Incluye datos del usuario relacionado
     });
+
     return NextResponse.json(dispositivos);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error al obtener dispositivos" }, { status: 500 });
+    console.error("Error en GET /api/dispositivos:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los dispositivos" },
+      { status: 500 }
+    );
   }
 }
 
-export async function POST(req: Request) {
+// ✅ POST: crear un nuevo dispositivo
+export async function POST(request: NextRequest) {
   try {
-    const body = await req.json();
+    const body = await request.json();
+
     const nuevoDispositivo = await prisma.dispositivo.create({
       data: {
         nombre: body.nombre,
@@ -26,9 +33,13 @@ export async function POST(req: Request) {
         usuarioId: body.usuarioId,
       },
     });
+
     return NextResponse.json(nuevoDispositivo);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error al crear dispositivo" }, { status: 500 });
+    console.error("Error en POST /api/dispositivos:", error);
+    return NextResponse.json(
+      { error: "Error al crear el dispositivo" },
+      { status: 500 }
+    );
   }
 }

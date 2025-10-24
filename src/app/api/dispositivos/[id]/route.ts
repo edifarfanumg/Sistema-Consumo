@@ -1,25 +1,41 @@
 // src/app/api/dispositivos/[id]/route.ts
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+// ✅ GET: obtener dispositivo por ID
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
+
     const dispositivo = await prisma.dispositivo.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       include: { usuario: true },
     });
+
     return NextResponse.json(dispositivo);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error al obtener dispositivo" }, { status: 500 });
+    console.error("Error en GET /api/dispositivos/[id]:", error);
+    return NextResponse.json(
+      { error: "Error al obtener el dispositivo" },
+      { status: 500 }
+    );
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+// ✅ PUT: actualizar dispositivo por ID
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const body = await req.json();
+    const { id } = await context.params;
+    const body = await request.json();
+
     const dispositivoActualizado = await prisma.dispositivo.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: {
         nombre: body.nombre,
         tipo: body.tipo,
@@ -28,21 +44,37 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         usuarioId: body.usuarioId,
       },
     });
+
     return NextResponse.json(dispositivoActualizado);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error al actualizar dispositivo" }, { status: 500 });
+    console.error("Error en PUT /api/dispositivos/[id]:", error);
+    return NextResponse.json(
+      { error: "Error al actualizar el dispositivo" },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+// ✅ DELETE: eliminar dispositivo por ID
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
+
     await prisma.dispositivo.delete({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
-    return NextResponse.json({ message: "Dispositivo eliminado correctamente" });
+
+    return NextResponse.json({
+      message: "Dispositivo eliminado correctamente",
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error al eliminar dispositivo" }, { status: 500 });
+    console.error("Error en DELETE /api/dispositivos/[id]:", error);
+    return NextResponse.json(
+      { error: "Error al eliminar el dispositivo" },
+      { status: 500 }
+    );
   }
 }
