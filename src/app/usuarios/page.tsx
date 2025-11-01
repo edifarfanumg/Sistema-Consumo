@@ -6,6 +6,7 @@ export default function UsuariosPage() {
   const [nuevoUsuario, setNuevoUsuario] = useState({
     nombre: "",
     correo: "",
+    password: "",
     rol: "Usuario",
     estado: "Activo",
   });
@@ -26,7 +27,8 @@ export default function UsuariosPage() {
 
   // 🔹 Crear usuario
   const agregarUsuario = async () => {
-    if (!nuevoUsuario.nombre || !nuevoUsuario.correo) return;
+    if (!nuevoUsuario.nombre || !nuevoUsuario.correo || !nuevoUsuario.password)
+      return alert("Completa todos los campos");
 
     try {
       const res = await fetch("/api/usuarios", {
@@ -34,10 +36,16 @@ export default function UsuariosPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoUsuario),
       });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || "Error al crear usuario");
+        return;
+      }
+
       const usuarioCreado = await res.json();
       setUsuarios([...usuarios, usuarioCreado]);
-      setNuevoUsuario({ nombre: "", correo: "", rol: "Usuario", estado: "Activo" });
-      setMostrarModal(false);
+      cerrarModal();
     } catch (error) {
       console.error("Error al crear usuario:", error);
     }
@@ -53,13 +61,12 @@ export default function UsuariosPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoUsuario),
       });
+
       const usuarioActualizado = await res.json();
       setUsuarios(
         usuarios.map((u) => (u.id === editarUsuarioId ? usuarioActualizado : u))
       );
-      setEditarUsuarioId(null);
-      setNuevoUsuario({ nombre: "", correo: "", rol: "Usuario", estado: "Activo" });
-      setMostrarModal(false);
+      cerrarModal();
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
     }
@@ -67,6 +74,7 @@ export default function UsuariosPage() {
 
   // 🔹 Eliminar usuario
   const eliminarUsuario = async (id: number) => {
+    if (!confirm("¿Deseas eliminar este usuario?")) return;
     try {
       await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
       setUsuarios(usuarios.filter((u) => u.id !== id));
@@ -81,10 +89,23 @@ export default function UsuariosPage() {
     setNuevoUsuario({
       nombre: usuario.nombre,
       correo: usuario.correo,
+      password: "",
       rol: usuario.rol,
       estado: usuario.estado,
     });
     setMostrarModal(true);
+  };
+
+  const cerrarModal = () => {
+    setMostrarModal(false);
+    setEditarUsuarioId(null);
+    setNuevoUsuario({
+      nombre: "",
+      correo: "",
+      password: "",
+      rol: "Usuario",
+      estado: "Activo",
+    });
   };
 
   useEffect(() => {
@@ -178,6 +199,15 @@ export default function UsuariosPage() {
                 }
                 className="p-2 rounded-lg border dark:border-gray-700 dark:bg-gray-900"
               />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={nuevoUsuario.password}
+                onChange={(e) =>
+                  setNuevoUsuario({ ...nuevoUsuario, password: e.target.value })
+                }
+                className="p-2 rounded-lg border dark:border-gray-700 dark:bg-gray-900"
+              />
               <select
                 value={nuevoUsuario.rol}
                 onChange={(e) =>
@@ -201,16 +231,7 @@ export default function UsuariosPage() {
 
               <div className="flex justify-between mt-4">
                 <button
-                  onClick={() => {
-                    setMostrarModal(false);
-                    setEditarUsuarioId(null);
-                    setNuevoUsuario({
-                      nombre: "",
-                      correo: "",
-                      rol: "Usuario",
-                      estado: "Activo",
-                    });
-                  }}
+                  onClick={cerrarModal}
                   className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
                 >
                   Cancelar

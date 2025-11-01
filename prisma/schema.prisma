@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -19,23 +16,34 @@ datasource db {
 // -----------------------------
 
 model Usuario {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  correo    String   @unique
-  rol       String
-  estado    String
-  createdAt DateTime @default(now())
+  id           Int           @id @default(autoincrement())
+  nombre       String
+  correo       String         @unique
+  password     String
+  rol          String
+  estado       String
+  createdAt    DateTime       @default(now())
   dispositivos Dispositivo[]
 }
 
 model Dispositivo {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  tipo      String
-  estado    String
-  consumo   Float    @default(0) // Nuevo campo para consumo energético
-  usuarioId Int
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  tipo       String
+  estado     String
+  consumo    Float    @default(0) // Nuevo campo para consumo energético
+  usuarioId  Int
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  createdAt  DateTime @default(now())
 }
 
+// -----------------------------
+// Modelo para reportes de soporte
+// -----------------------------
+model Reporte {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  correo    String
+  mensaje   String
+  createdAt DateTime @default(now())
+}
